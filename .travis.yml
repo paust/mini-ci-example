@@ -4,6 +4,8 @@ language: go
 
 go:
   - 1.13.x
+  
+  # Add Docker service
 services:
 - docker
 
@@ -12,10 +14,17 @@ script:
   - go test -v ./...
   # Build the code 
   - CGO_ENABLED=0 GOARCH=amd64 go build -o demo
+   
+   # Login to DockerHub
+  - echo "$REGISTRY_PASSWORD" | docker login --username $REGISTRY_USER --password-stdin
   
-- echo "$REGISTRY_PASSWORD" | docker login --username $REGISTRY_USER --password-stdin
-- docker build -f Dockerfile -t paukners/demo:latest ./
-- GIT_SHA="$(git rev-parse --short HEAD)"
-- docker tag paukners/demo:latest paukners/demo:$GIT_SHA
-- docker push paukners/demo:latest
-- docker push paukners/demo:$GIT_SHA
+  # Build the Docker image
+  - docker build -f Dockerfile -t paukners/demo:latest ./
+  
+  # Retrieve Git SHA and re-tag Docker image 
+  - GIT_SHA="$(git rev-parse --short HEAD)"
+  - docker tag paukners/demo:latest paukners/demo:$GIT_SHA
+  
+   # Push images to DockerHub
+  - docker push paukners/demo:latest
+  - docker push paukners/demo:$GIT_SHA
