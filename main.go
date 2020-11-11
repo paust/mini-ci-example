@@ -10,6 +10,7 @@ import (
 func handler(w http.ResponseWriter, r *http.Request) {
 	t := time.Now()
 	fmt.Fprintf(w, "Hello, time: %d:%d", t.Hour(), getMinute(t.Minute(), t.Second()))
+	fmt.Fprintf(w, "Hello, time: %d:%d", t.Hour(), getMinute(t.Minute(), t.Second()))
 
 	Fibonacci(1000)
 }
