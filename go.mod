@@ -1,4 +1,4 @@
-module github.com/paust/mini-ci-example
+module github.com/your-repo/mini-example
 
 go 1.13
 
